@@ -2,16 +2,17 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.Student;
 import com.example.demo.service.StudentService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
 public class StudentController
 {
-
 
     final StudentService studentService;
     @GetMapping("/student/{id}")
@@ -20,9 +21,12 @@ public class StudentController
         return studentService.getStudentByID(id);
     }
 
+
+
+    @PageableAsQueryParam
     @GetMapping("/student")
-    public List<Student> getAllStudents(){
-        return studentService.getAllStudents();
+    public Page<Student> getAllStudents(@Parameter(hidden = true) Pageable pageable){
+        return studentService.getAllStudents(pageable);
     }
 
     @PostMapping("/student")
